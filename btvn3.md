@@ -1,49 +1,36 @@
 # Phần 1: Báo cáo phân tích
 
-Soi bằng F12, chọn khung "Nội dung bài học", xem tab Computed. (số liệu là ví dụ)
+Box model của `#lesson-content` (soi bằng F12, tab Computed):
 
 ```
-+-------------------------------------+
-| margin: 0 (dưới: -20px)             |
-|  +-------------------------------+  |
-|  | border: 2px                   |  |
-|  |  +-------------------------+  |  |
-|  |  | padding: 20px           |  |  |
-|  |  |  +-------------------+  |  |  |
-|  |  |  | content 600 x 300 |  |  |  |
-|  |  |  +-------------------+  |  |  |
-|  |  +-------------------------+  |  |
-|  +-------------------------------+  |
-+-------------------------------------+
++-------------------------------+
+| margin: -10 / 15              |
+|  +-------------------------+  |
+|  | border: 1               |  |
+|  |  +-------------------+  |  |
+|  |  | padding: 12 / 10  |  |  |
+|  |  |  +-------------+  |  |  |
+|  |  |  | 840 x 600   |  |  |  |
+|  |  |  +-------------+  |  |  |
+|  |  +-------------------+  |  |
+|  +-------------------------+  |
++-------------------------------+
 ```
-
-- content: chữ, hình bên trong
-- padding: khoảng cách trong viền
-- border: đường viền
-- margin: khoảng cách ngoài viền, cách khung khác
 
 **Nguyên nhân đè:**
-- box-sizing là content-box nên tổng kích thước = 600 + 40 + 4 = 644px, bị tràn.
-- margin-bottom âm (-20px) kéo khung dưới lên đè.
+- Hai khung đều width 65%, cộng lại 130% nên không đủ chỗ.
+- margin-right -20px kéo khung kia vào đè lên.
+- content-box nên padding và border cộng thêm vào chiều rộng.
 
-**Nếu chỉ đổi margin không xem padding:** khung vẫn to hơn dự tính nên vẫn tràn, và margin 2 khung sát nhau bị gộp (margin collapse) nên khoảng cách không như mong muốn.
+**Nếu chỉ đổi margin mà không xem padding:** khung vẫn to hơn dự tính nên vẫn tràn.
 
 # Phần 2: Thiết kế giải pháp
 
 ```css
-.noi-dung-bai-hoc {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 16px;
-  border: 1px solid #ccc;
-  margin-bottom: 20px;
-}
-
-.danh-sach-video {
-  box-sizing: border-box;
-  margin-top: 0;
-}
+div#lesson-content { box-sizing: border-box; width: 65%; margin-right: 20px; }
+div#video-list { box-sizing: border-box; width: 30%; }
 ```
 
-- border-box: width đã tính cả padding và border, hết tràn.
-- margin-bottom từ -20px thành 20px: hai khung tách ra.
+- 65% + 30% + margin 20px nhỏ hơn 100% nên hai khung nằm cạnh nhau.
+- margin đổi từ -20px thành 20px để tách hai khung.
+- border-box để padding và border không làm tràn.
